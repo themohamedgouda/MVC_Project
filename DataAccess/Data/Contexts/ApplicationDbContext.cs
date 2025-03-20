@@ -7,16 +7,24 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Data.Contexts
 {
-    internal class ApplicationDbContext : DbContext
+    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
     {
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer("ConnectionString");
-        }
+        #region Use Primay CTOR instead
+        //public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        //{
+
+        //}
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseSqlServer("ConnectionString");
+        //} 
+        #endregion
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
            // modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
+        public DbSet<Department> Departments { get; set; }
+
     }
 }
