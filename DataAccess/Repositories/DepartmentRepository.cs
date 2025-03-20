@@ -8,12 +8,24 @@ using System.Threading.Tasks;
 namespace DataAccess.Repositories
 {
     //Primary CTOR
-    internal class DepartmentRepository(ApplicationDbContext dbContext)
+    public class DepartmentRepository(ApplicationDbContext dbContext) : IDepartmentRepository
     {
         // also can remove
         private readonly ApplicationDbContext _dbContext = dbContext;
         // CRUD Operations
+        #region CRUD
         // Get All
+        public IEnumerable<Department> GetAll(bool WithTracking = false)
+        {
+            if (WithTracking)
+            {
+                return _dbContext.Departments.ToList();
+            }
+            else
+            {
+                return _dbContext.Departments.AsNoTracking().ToList();
+            }
+        }
         // Gey By Id
         public Department? GetById(int id)
         {
@@ -23,9 +35,30 @@ namespace DataAccess.Repositories
 
         }
         // Insert
-        // Update
-        // Delete
+        public int Add(Department department)
+        {
+            _dbContext.Departments.Add(department); //localy
+            var Result = _dbContext.SaveChanges();
+            return Result;
 
+        }
+        // Update
+        public int Update(Department department)
+        {
+            _dbContext.Departments.Update(department); //localy
+            var Result = _dbContext.SaveChanges();
+            return Result;
+
+        }
+        // Delete
+        public int Remove(Department department)
+        {
+            _dbContext.Departments.Remove(department); //localy
+            var Result = _dbContext.SaveChanges();
+            return Result;
+
+        }
+        #endregion
         // Notes
         #region Traditional_CTOR
         //public DepartmentRepository(ApplicationDbContext dbContext)   // DI

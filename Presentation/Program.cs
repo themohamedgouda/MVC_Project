@@ -1,4 +1,5 @@
 using DataAccess.Data.Contexts;
+using DataAccess.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace Presentation
@@ -19,6 +20,8 @@ namespace Presentation
              options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")) 
             #endregion
             );
+            //builder.Services.AddScoped<DepartmentRepository>();
+            builder.Services.AddScoped<IDepartmentRepository,DepartmentRepository>();
             #endregion
             // Add middleware to the container.
             #region MiddleWare
