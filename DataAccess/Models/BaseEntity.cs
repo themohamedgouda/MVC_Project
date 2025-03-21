@@ -10,9 +10,9 @@ namespace DataAccess.Models
     {
         public int Id { get; set; } // PK
         public int CreateBy { get; set; } // UserID
-        public DateTime? CreateOn { get; set; }
+        public DateTime CreateOn { get; set; }
         public int LastModifiedBy { get; set; }  // UserID
-        public DateTime? LastModifiedOn { get; set; } // Automatic Calculated
+        public DateTime LastModifiedOn { get; set; } // Automatic Calculated
         public bool IsDeleted { get; set; }  // UserID
 
     }

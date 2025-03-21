@@ -1,3 +1,4 @@
+using BusinessLogic.Services;
 using DataAccess.Data.Contexts;
 using DataAccess.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,7 @@ namespace Presentation
             );
             //builder.Services.AddScoped<DepartmentRepository>();
             builder.Services.AddScoped<IDepartmentRepository,DepartmentRepository>();
+            builder.Services.AddScoped<IDepartmentServices,DepartmentServices>();
             #endregion
             // Add middleware to the container.
             #region MiddleWare
