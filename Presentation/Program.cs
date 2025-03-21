@@ -1,3 +1,8 @@
+using BusinessLogic.Services;
+using DataAccess.Data.Contexts;
+using DataAccess.Repositories;
+using Microsoft.EntityFrameworkCore;
+
 namespace Presentation
 {
     public class Program
@@ -8,6 +13,17 @@ namespace Presentation
             // Add services to the container.
             #region Services
             builder.Services.AddControllersWithViews();
+            //builder.Services.AddScoped<ApplicationDbContext>(); // Register to Services in DI Contianer
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+            #region ConnectionStrings
+             //options.UseSqlServer(builder.Configuration["ConnectionStrings:DefaultConnection"])
+             //options.UseSqlServer(builder.Configuration.GetSection("ConnectionStrings")["DefaultConnection"])
+             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")) 
+            #endregion
+            );
+            //builder.Services.AddScoped<DepartmentRepository>();
+            builder.Services.AddScoped<IDepartmentRepository,DepartmentRepository>();
+            builder.Services.AddScoped<IDepartmentServices,DepartmentServices>();
             #endregion
             // Add middleware to the container.
             #region MiddleWare
