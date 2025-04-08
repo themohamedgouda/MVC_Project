@@ -21,7 +21,7 @@ namespace DataAccess.Data.Contexts
         #endregion
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-           // modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+          // modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
         public DbSet<Department> Departments { get; set; }
