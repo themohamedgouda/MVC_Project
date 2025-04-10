@@ -1,14 +1,190 @@
-﻿using BusinessLogic.Services;
+﻿using BusinessLogic.DataTransfereObjects;
+using BusinessLogic.DataTransfereObjects.DepartmentDtos;
+using BusinessLogic.Services.Interfaces;
+using DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
+using Presentation.ViewModels;
+using Presentation.ViewModels.DepartmentViwModel;
+using System.Linq.Expressions;
 
 namespace Presentation.Controllers
 {
-    public class DepartmentController(IDepartmentServices departmentservices) : Controller
+    public class DepartmentController(IDepartmentServices _departmentservices , 
+        ILogger<DepartmentController> _logger , IWebHostEnvironment _environment) : Controller
     {
+
         public IActionResult Index()
+        
         {
-            var departments = departmentservices.GetAllDepartments();
+            var departments = _departmentservices.GetAllDepartments();
             return View(departments);
         }
+
+        #region CreateDepartment
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Create(CreatedDepartmentDTO DepartmentDTO)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    int Result = _departmentservices.AddDepartment(DepartmentDTO);
+                    if (Result > 0)
+                    {
+                       // return View(nameof(Index));
+                       return RedirectToAction(nameof(Index));
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Department Can't be Created");
+                      //  return View(DepartmentDTO) ;
+                    }
+                }
+                catch(Exception Ex)
+                {
+                    if (_environment.IsDevelopment())
+                    {
+                        //Dev
+                        ModelState.AddModelError(string.Empty, $"{Ex.Message}");
+                      //  return View(DepartmentDTO);
+                    }
+                    else
+                    {
+                        //Deployment
+                        _logger.LogError(Ex.Message);
+                       // return View(DepartmentDTO);
+                    }
+
+                }
+            }
+            //else
+            //{
+            //    return View(DepartmentDTO);
+
+            //}
+            return View(DepartmentDTO);
+        }
+        #endregion
+        #region Details of Department
+        [HttpGet]
+        public IActionResult Details(int? id) 
+        {
+            if (!id.HasValue)
+                return BadRequest();
+            var department = _departmentservices.GetDepartmentById(id.Value);
+            if (department == null) return NotFound();
+            return View(department);
+        }
+
+        #endregion
+        #region Edit Department
+        [HttpGet]
+        public IActionResult Edit(int? id)
+        {
+            if(!id.HasValue) return BadRequest();
+            var department = _departmentservices.GetDepartmentById(id.Value);
+            if (department is null) return NotFound();
+            var departmentViewModel = new DepartmentEditViewModel
+            { 
+                Code = department.Code,
+                Name = department.Name,
+                Description = department.Description,
+                DateOfCreation = department.CreateOn,
+            };
+            return View(departmentViewModel);
+
+        }
+        [HttpPost]
+        public IActionResult Edit([FromRoute]int Id , DepartmentEditViewModel ViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var UpdatedDepartment = new UpdatedDepartmentDTO
+                    {
+                        Id = Id,
+                        Code = ViewModel.Code,
+                        Name = ViewModel.Name,
+                        Description = ViewModel.Description,
+                        DateOfCreation = ViewModel.DateOfCreation,
+                    };
+                    int Result = _departmentservices.UpdateDepartment(UpdatedDepartment);
+                    if (Result > 0)
+                        return RedirectToAction(nameof(Index));
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Department is not updated");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    {
+                        if (_environment.IsDevelopment())
+                        {
+                            //Dev
+                            ModelState.AddModelError(string.Empty, $"{ex.Message}");
+                        }
+                        else
+                        {
+                            //Deployment
+                            _logger.LogError(ex.Message);
+                            return View("ErrorView", ex);
+                        }
+                    }
+                }
+            }
+            return View(ViewModel);
+        }
+
+        #endregion
+        #region Delete Department
+        [HttpGet]
+        public IActionResult Delete(int? id)
+        {
+            if(!id.HasValue)  return BadRequest();
+            var department = _departmentservices.GetDepartmentById(id.Value);
+            if (department != null) return View(department);
+            return NotFound();
+        }
+        [HttpPost]
+        public IActionResult Delete(int id)
+        {
+            if (id == 0) return BadRequest();
+            try
+            {
+                bool Result = _departmentservices.DeleteDepartment(id);
+                if (Result)
+                    return RedirectToAction(nameof(Index));
+                else
+                    ModelState.AddModelError(string.Empty, "Department Is not deleted");
+                // return View();
+                return RedirectToAction(nameof(Delete), new { id });
+            }
+            catch(Exception Ex)
+            {
+                if (_environment.IsDevelopment())
+                {
+                    //Dev
+                    ModelState.AddModelError(string.Empty, $"{Ex.Message}");
+                    return RedirectToAction(nameof(Index));
+                    //  return View(DepartmentDTO);
+                }
+                else
+                {
+                    //Deployment
+                    _logger.LogError(Ex.Message);
+                    return View("ErrorView", Ex);
+
+                    // return View(DepartmentDTO);
+                }
+            }
+        }
+        #endregion
     }
 }
