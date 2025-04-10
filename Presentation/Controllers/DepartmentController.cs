@@ -140,6 +140,50 @@ namespace Presentation.Controllers
             }
             return View(ViewModel);
         }
+
+        #endregion
+        #region Delete Department
+        [HttpGet]
+        public IActionResult Delete(int? id)
+        {
+            if(!id.HasValue)  return BadRequest();
+            var department = _departmentservices.GetDepartmentById(id.Value);
+            if (department != null) return View(department);
+            return NotFound();
+        }
+        [HttpPost]
+        public IActionResult Delete(int id)
+        {
+            if (id == 0) return BadRequest();
+            try
+            {
+                bool Result = _departmentservices.DeleteDepartment(id);
+                if (Result)
+                    return RedirectToAction(nameof(Index));
+                else
+                    ModelState.AddModelError(string.Empty, "Department Is not deleted");
+                // return View();
+                return RedirectToAction(nameof(Delete), new { id });
+            }
+            catch(Exception Ex)
+            {
+                if (_environment.IsDevelopment())
+                {
+                    //Dev
+                    ModelState.AddModelError(string.Empty, $"{Ex.Message}");
+                    return RedirectToAction(nameof(Index));
+                    //  return View(DepartmentDTO);
+                }
+                else
+                {
+                    //Deployment
+                    _logger.LogError(Ex.Message);
+                    return View("ErrorView", Ex);
+
+                    // return View(DepartmentDTO);
+                }
+            }
+        }
         #endregion
     }
 }

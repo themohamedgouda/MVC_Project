@@ -12,7 +12,7 @@ namespace BusinessLogic.DataTransfereObjects
         [Required(ErrorMessage ="Name is required")]
         public string Name { get; set; }
         [Required]
-        [Range(0,100)]
+        [Range(0,900)]
         public string Code { get; set; } = string.Empty;
         public string? Description { get; set; } = string.Empty;
         public DateOnly DateOfCreation { get; set; }
