@@ -1,5 +1,6 @@
-﻿using BusinessLogic.DataTransfereObjects;
+﻿using BusinessLogic.DataTransfereObjects.DepartmentDtos;
 using BusinessLogic.Factories;
+using BusinessLogic.Services.Interfaces;
 using DataAccess.Models;
 using DataAccess.Repositories.Interfaces;
 using System;
@@ -8,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusinessLogic.Services
+namespace BusinessLogic.Services.Classes
 {
     public class DepartmentServices(IDepartmentRepository _departmentRepository) : IDepartmentServices
     {

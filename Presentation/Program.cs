@@ -1,4 +1,5 @@
-using BusinessLogic.Services;
+using BusinessLogic.Services.Classes;
+using BusinessLogic.Services.Interfaces;
 using DataAccess.Data.Contexts;
 using DataAccess.Repositories.Classes;
 using DataAccess.Repositories.Interfaces;
@@ -25,6 +26,7 @@ namespace Presentation
             //builder.Services.AddScoped<DepartmentRepository>();
             builder.Services.AddScoped<IDepartmentRepository,DepartmentRepository>();
             builder.Services.AddScoped<IDepartmentServices,DepartmentServices>();
+            builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             #endregion
             // Add middleware to the container.
             #region MiddleWare

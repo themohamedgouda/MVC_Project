@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusinessLogic.DataTransfereObjects
+namespace BusinessLogic.DataTransfereObjects.DepartmentDtos
 {
     public class DepartmentDetailsDTO
     {

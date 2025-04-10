@@ -1,5 +1,6 @@
 ﻿using BusinessLogic.DataTransfereObjects;
-using BusinessLogic.Services;
+using BusinessLogic.DataTransfereObjects.DepartmentDtos;
+using BusinessLogic.Services.Interfaces;
 using DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.ViewModels;
