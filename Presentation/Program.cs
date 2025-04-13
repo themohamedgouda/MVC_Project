@@ -1,3 +1,4 @@
+using BusinessLogic.Profiles;
 using BusinessLogic.Services.Classes;
 using BusinessLogic.Services.Interfaces;
 using DataAccess.Data.Contexts;
@@ -27,6 +28,9 @@ namespace Presentation
             builder.Services.AddScoped<IDepartmentRepository,DepartmentRepository>();
             builder.Services.AddScoped<IDepartmentServices,DepartmentServices>();
             builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            //builder.Services.AddAutoMapper(typeof(MappingProfiles));        
+            //builder.Services.AddAutoMapper(typeof(ProjectReference).Assembly);        
+            builder.Services.AddAutoMapper(M=>M.AddProfile(new MappingProfiles()));
             #endregion
             // Add middleware to the container.
             #region MiddleWare
