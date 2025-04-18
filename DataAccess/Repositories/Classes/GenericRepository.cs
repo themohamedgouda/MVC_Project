@@ -20,7 +20,7 @@ namespace DataAccess.Repositories.Classes
             {
                 return _dbContext.Set<TEntity>().Where(E=>E.IsDeleted !=true).ToList();
             }
-            else 
+            else  
             {
                 return _dbContext.Set<TEntity>().Where(E => E.IsDeleted != true).AsNoTracking().ToList();
             }
