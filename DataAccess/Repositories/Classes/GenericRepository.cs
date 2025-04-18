@@ -26,7 +26,7 @@ namespace DataAccess.Repositories.Classes
             }
         }
         // Gey By Id
-        public TEntity? GetById(int id)
+        public TEntity? GetById(int id) 
         {
             var TEntity = _dbContext.Set<TEntity>().Find(id);
 
