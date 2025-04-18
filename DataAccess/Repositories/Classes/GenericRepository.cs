@@ -30,7 +30,7 @@ namespace DataAccess.Repositories.Classes
         {
             var TEntity = _dbContext.Set<TEntity>().Find(id);
 
-            return TEntity;
+            return TEntity; 
 
         }
         // Insert
