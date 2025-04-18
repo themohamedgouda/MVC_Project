@@ -4,6 +4,7 @@ using BusinessLogic.Services.Interfaces;
 using DataAccess.Data.Contexts;
 using DataAccess.Repositories.Classes;
 using DataAccess.Repositories.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Presentation
@@ -15,7 +16,10 @@ namespace Presentation
             var builder = WebApplication.CreateBuilder(args);
             // Add services to the container.
             #region Services
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews(options=>
+            {
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            });
             //builder.Services.AddScoped<ApplicationDbContext>(); // Register to Services in DI Contianer
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
             #region ConnectionStrings

@@ -26,6 +26,7 @@ namespace Presentation.Controllers
         {
             return View();
         }
+        //[ValidateAntiForgeryToken] // action fillter
         [HttpPost]
         public IActionResult Create(CreatedDepartmentDTO DepartmentDTO)
         {
