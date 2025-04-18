@@ -25,7 +25,7 @@ namespace DataAccess.Repositories.Classes
                 return _dbContext.Set<TEntity>().Where(E => E.IsDeleted != true).AsNoTracking().ToList();
             }
         }
-        // Gey By Id
+        // Gey By Id 
         public TEntity? GetById(int id) 
         {
             var TEntity = _dbContext.Set<TEntity>().Find(id);
