@@ -1,8 +1,10 @@
+using BusinessLogic.Profiles;
 using BusinessLogic.Services.Classes;
 using BusinessLogic.Services.Interfaces;
 using DataAccess.Data.Contexts;
 using DataAccess.Repositories.Classes;
 using DataAccess.Repositories.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Presentation
@@ -14,7 +16,10 @@ namespace Presentation
             var builder = WebApplication.CreateBuilder(args);
             // Add services to the container.
             #region Services
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews(options=>
+            {
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            });
             //builder.Services.AddScoped<ApplicationDbContext>(); // Register to Services in DI Contianer
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
             #region ConnectionStrings
@@ -27,6 +32,10 @@ namespace Presentation
             builder.Services.AddScoped<IDepartmentRepository,DepartmentRepository>();
             builder.Services.AddScoped<IDepartmentServices,DepartmentServices>();
             builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            builder.Services.AddScoped<IEmployeeServices, EmployeeServices>();
+            //builder.Services.AddAutoMapper(typeof(MappingProfiles));        
+            //builder.Services.AddAutoMapper(typeof(ProjectReference).Assembly);        
+            builder.Services.AddAutoMapper(M=>M.AddProfile(new MappingProfiles()));
             #endregion
             // Add middleware to the container.
             #region MiddleWare

@@ -18,19 +18,19 @@ namespace DataAccess.Repositories.Classes
         {
             if (WithTracking)
             {
-                return _dbContext.Set<TEntity>().ToList();
+                return _dbContext.Set<TEntity>().Where(E=>E.IsDeleted !=true).ToList();
             }
-            else
+            else  
             {
-                return _dbContext.Set<TEntity>().AsNoTracking().ToList();
+                return _dbContext.Set<TEntity>().Where(E => E.IsDeleted != true).AsNoTracking().ToList();
             }
         }
-        // Gey By Id
-        public TEntity? GetById(int id)
+        // Gey By Id 
+        public TEntity? GetById(int id) 
         {
             var TEntity = _dbContext.Set<TEntity>().Find(id);
 
-            return TEntity;
+            return TEntity; 
 
         }
         // Insert

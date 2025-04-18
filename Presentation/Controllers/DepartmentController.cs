@@ -26,6 +26,7 @@ namespace Presentation.Controllers
         {
             return View();
         }
+        //[ValidateAntiForgeryToken] // action fillter
         [HttpPost]
         public IActionResult Create(CreatedDepartmentDTO DepartmentDTO)
         {
@@ -71,15 +72,15 @@ namespace Presentation.Controllers
         }
         #endregion
         #region Details of Department
-        [HttpGet]
-        public IActionResult Details(int? id) 
-        {
-            if (!id.HasValue)
-                return BadRequest();
-            var department = _departmentservices.GetDepartmentById(id.Value);
-            if (department == null) return NotFound();
-            return View(department);
-        }
+            [HttpGet]
+            public IActionResult Details(int? id) 
+            {
+                if (!id.HasValue)
+                    return BadRequest();
+                var department = _departmentservices.GetDepartmentById(id.Value);
+                if (department == null) return NotFound();
+                return View(department);
+            }
 
         #endregion
         #region Edit Department

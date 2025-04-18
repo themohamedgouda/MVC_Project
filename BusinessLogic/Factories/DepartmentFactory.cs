@@ -10,7 +10,7 @@ namespace BusinessLogic.Factories
 {
     static class DepartmentFactory
     {
-        public static DepartmentDTO ToDepartmentDTO(this Department department)
+        public static DepartmentDTO ToDepartmentDTO(this Department department) 
         {
             return new DepartmentDTO()
             {
