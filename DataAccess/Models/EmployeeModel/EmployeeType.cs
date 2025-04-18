@@ -10,5 +10,6 @@ namespace DataAccess.Models.EmployeeModel
     {
        FullTime = 1,
        PartTime = 2,
+       Remote = 3,
     }
 }

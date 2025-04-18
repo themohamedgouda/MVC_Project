@@ -16,10 +16,10 @@ namespace BusinessLogic.Services.Classes
 {
     public class EmployeeServices(IEmployeeRepository _employeeRepository , IMapper _mapper) : IEmployeeServices
     {
-        public IEnumerable<EmployeeDTO> GetAllEmployees(bool WithTracking)
+        public IEnumerable<EmployeeDTO> GetAllEmployees(bool WithTracking = false)
         {
             var Employees = _employeeRepository.GetAll();
-            var EmployeesDto = _mapper.Map<IEnumerable<EmployeeDTO>>(Employees);
+            var EmployeesDto = _mapper.Map<IEnumerable<Employee>,IEnumerable<EmployeeDTO>>(Employees);
             return EmployeesDto;
         }
         public EmployeeDetailsDTO? GetEmployeeById(int id)
