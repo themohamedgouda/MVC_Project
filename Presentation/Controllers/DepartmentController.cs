@@ -28,51 +28,43 @@ namespace Presentation.Controllers
         }
         //[ValidateAntiForgeryToken] // action fillter
         [HttpPost]
-        public IActionResult Create(CreatedDepartmentDTO DepartmentDTO)
+        public IActionResult Create(DepartmentViewModel departmentViewModel)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    int Result = _departmentservices.AddDepartment(DepartmentDTO);
+                    var departmentDto = new CreatedDepartmentDTO { 
+                        Code = departmentViewModel.Code,
+                        DateOfCreation = departmentViewModel.DateOfCreation,
+                        Description = departmentViewModel.Description,
+                        Name = departmentViewModel.Name                     
+                    };
+                    int Result = _departmentservices.AddDepartment(departmentDto);
                     if (Result > 0)
                     {
-                       // return View(nameof(Index));
                        return RedirectToAction(nameof(Index));
                     }
                     else
                     {
                         ModelState.AddModelError(string.Empty, "Department Can't be Created");
-                      //  return View(DepartmentDTO) ;
                     }
                 }
                 catch(Exception Ex)
                 {
                     if (_environment.IsDevelopment())
-                    {
-                        //Dev
                         ModelState.AddModelError(string.Empty, $"{Ex.Message}");
-                      //  return View(DepartmentDTO);
-                    }
+                    
                     else
-                    {
-                        //Deployment
                         _logger.LogError(Ex.Message);
-                       // return View(DepartmentDTO);
-                    }
-
                 }
             }
-            //else
-            //{
-            //    return View(DepartmentDTO);
+            return View(model: departmentViewModel);
 
-            //}
-            return View(DepartmentDTO);
         }
         #endregion
         #region Details of Department
-            [HttpGet]
+        [HttpGet]
             public IActionResult Details(int? id) 
             {
                 if (!id.HasValue)
@@ -90,7 +82,7 @@ namespace Presentation.Controllers
             if(!id.HasValue) return BadRequest();
             var department = _departmentservices.GetDepartmentById(id.Value);
             if (department is null) return NotFound();
-            var departmentViewModel = new DepartmentEditViewModel
+            var departmentViewModel = new DepartmentViewModel
             { 
                 Code = department.Code,
                 Name = department.Name,
@@ -101,7 +93,7 @@ namespace Presentation.Controllers
 
         }
         [HttpPost]
-        public IActionResult Edit([FromRoute]int Id , DepartmentEditViewModel ViewModel)
+        public IActionResult Edit([FromRoute]int Id , DepartmentViewModel ViewModel)
         {
             if (ModelState.IsValid)
             {
