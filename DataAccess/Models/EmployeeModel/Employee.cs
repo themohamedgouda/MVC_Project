@@ -1,4 +1,5 @@
-﻿using DataAccess.Models.Shared;
+﻿using DataAccess.Models.DepartmentModel;
+using DataAccess.Models.Shared;
 using DataAccess.Models.Shared.Enums;
 using System;
 using System.Collections.Generic;
@@ -20,5 +21,8 @@ namespace DataAccess.Models.EmployeeModel
         public DateTime HiringDate { get; set; }
         public  Gender Gender  { get; set; }
         public EmployeeType EmployeeType { get; set; }
+        public Department? Department { get; set; }
+        public int? DepartmentId { get; set; }
+
     }
 }
