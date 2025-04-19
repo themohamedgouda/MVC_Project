@@ -16,6 +16,10 @@ namespace Presentation.Controllers
         public IActionResult Index()
         
         {
+            ViewBag.Message = new DepartmentDTO() { Name = "TestViewBag"};
+            //ViewData["Message"] = "Hello From View Data";
+            ViewData["Message"] = new DepartmentDTO() { Name = "TestViewData" };
+            //ViewBag.Message = "Hello From View Bag";
             var departments = _departmentservices.GetAllDepartments();
             return View(departments);
         }

@@ -1,5 +1,16 @@
 ﻿@using BusinessLogic.DataTransfereObjects.DepartmentDtos
 @model IEnumerable<DepartmentDTO>
+@{
+    var dept = ViewData["Message"] as DepartmentDTO;
+}
+<div class="alert alert-danger">
+    @dept.Name;
+</div>
+<div class="alert alert-success">
+    @ViewBag.Message.Name;
+</div>
+
+  
 <h1>All Departments</h1>
 <br />
 <br />
