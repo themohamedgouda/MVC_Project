@@ -16,10 +16,10 @@ namespace Presentation.Controllers
         public IActionResult Index()
         
         {
-            ViewBag.Message = new DepartmentDTO() { Name = "TestViewBag"};
-            //ViewData["Message"] = "Hello From View Data";
-            ViewData["Message"] = new DepartmentDTO() { Name = "TestViewData" };
-            //ViewBag.Message = "Hello From View Bag";
+            //ViewBag.Message = new DepartmentDTO() { Name = "TestViewBag"};
+            ////ViewData["Message"] = "Hello From View Data";
+            //ViewData["Message"] = new DepartmentDTO() { Name = "TestViewData" };
+            ////ViewBag.Message = "Hello From View Bag";
             var departments = _departmentservices.GetAllDepartments();
             return View(departments);
         }
@@ -45,14 +45,17 @@ namespace Presentation.Controllers
                         Name = departmentViewModel.Name                     
                     };
                     int Result = _departmentservices.AddDepartment(departmentDto);
+                    var Message = string.Empty;
                     if (Result > 0)
                     {
-                       return RedirectToAction(nameof(Index));
+                        Message = $"Department {departmentViewModel.Name} is Created Successfully";
                     }
                     else
                     {
-                        ModelState.AddModelError(string.Empty, "Department Can't be Created");
+                        Message = $"Department {departmentViewModel.Name} Cant not be Created ";
                     }
+                    TempData["Message"] = Message;
+                    return RedirectToAction(nameof(Index));
                 }
                 catch(Exception Ex)
                 {
