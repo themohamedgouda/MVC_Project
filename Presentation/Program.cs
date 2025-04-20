@@ -22,17 +22,17 @@ namespace Presentation
             });
             //builder.Services.AddScoped<ApplicationDbContext>(); // Register to Services in DI Contianer
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
-            #region ConnectionStrings
-             //options.UseSqlServer(builder.Configuration["ConnectionStrings:DefaultConnection"])
-             //options.UseSqlServer(builder.Configuration.GetSection("ConnectionStrings")["DefaultConnection"])
-             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")) 
-            #endregion
-            );
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+                options.UseLazyLoadingProxies();
+             },ServiceLifetime.Scoped);
+            
             //builder.Services.AddScoped<DepartmentRepository>();
-            builder.Services.AddScoped<IDepartmentRepository,DepartmentRepository>();
+            //builder.Services.AddScoped<IDepartmentRepository,DepartmentRepository>();
             builder.Services.AddScoped<IDepartmentServices,DepartmentServices>();
-            builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            //builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             builder.Services.AddScoped<IEmployeeServices, EmployeeServices>();
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             //builder.Services.AddAutoMapper(typeof(MappingProfiles));        
             //builder.Services.AddAutoMapper(typeof(ProjectReference).Assembly);        
             builder.Services.AddAutoMapper(M=>M.AddProfile(new MappingProfiles()));

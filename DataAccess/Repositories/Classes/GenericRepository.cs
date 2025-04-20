@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -34,28 +35,26 @@ namespace DataAccess.Repositories.Classes
 
         }
         // Insert
-        public int Add(TEntity TEntity)
+        public void Add(TEntity TEntity)
         {
             _dbContext.Set<TEntity>().Add(TEntity); //localy
-            var Result = _dbContext.SaveChanges();
-            return Result;
-
         }
         // Update
-        public int Update(TEntity TEntity)
+        public void Update(TEntity TEntity)
         {
             _dbContext.Set<TEntity>().Update(TEntity); //localy
-            var Result = _dbContext.SaveChanges();
-            return Result;
 
         }
         // Delete
-        public int Remove(TEntity TEntity)
+        public void Remove(TEntity TEntity)
         {
             _dbContext.Set<TEntity>().Remove(TEntity); //localy
-            var Result = _dbContext.SaveChanges();
-            return Result;
 
+        }
+
+        public IEnumerable<TEntity> GetAll(Expression<Func<TEntity, bool>> Predicate)
+        {
+            return _dbContext.Set<TEntity>().Where(Predicate).ToList();
         }
     }
 }

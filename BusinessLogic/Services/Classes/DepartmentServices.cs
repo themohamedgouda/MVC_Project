@@ -2,6 +2,7 @@
 using BusinessLogic.Factories;
 using BusinessLogic.Services.Interfaces;
 using DataAccess.Models;
+using DataAccess.Models.EmployeeModel;
 using DataAccess.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace BusinessLogic.Services.Classes
 {
-    public class DepartmentServices(IDepartmentRepository _departmentRepository) : IDepartmentServices
+    public class DepartmentServices(IUnitOfWork _unitOfWork ) : IDepartmentServices
     {
         #region Old_Ctor
         //private readonly IDepartmentRepository _departmentRepository;
@@ -25,7 +26,7 @@ namespace BusinessLogic.Services.Classes
         // Get  All Department
         public IEnumerable<DepartmentDTO> GetAllDepartments()
         {
-            var departments = _departmentRepository.GetAll();
+            var departments = _unitOfWork.DepartmentRepository.GetAll();
             return departments.Select(D => D.ToDepartmentDTO());
             #region Making by anotherway
             //    var departmentsToReturn = departments.Select(D => new DepartmentDTO()
@@ -43,7 +44,7 @@ namespace BusinessLogic.Services.Classes
         // Get Dept By Id
         public DepartmentDetailsDTO GetDepartmentById(int id)
         {
-            var departmentdetails = _departmentRepository.GetById(id);
+            var departmentdetails = _unitOfWork.DepartmentRepository.GetById(id);
             return departmentdetails is null ? null! : departmentdetails.ToDepartmentDetailsDTO();
             #region Making by another way
             //if (department == null) return null;
@@ -82,23 +83,27 @@ namespace BusinessLogic.Services.Classes
         public int AddDepartment(CreatedDepartmentDTO createdDepartmentDTO)
         {
             var department = createdDepartmentDTO.ToEntity();
-            return _departmentRepository.Add(department);
+            _unitOfWork.DepartmentRepository.Add(department);
+            return _unitOfWork.SaveChanges();
         }
         //Update Department
         public int UpdateDepartment(UpdatedDepartmentDTO updatedDepartmentDTO)
         {
             var department = updatedDepartmentDTO.ToEntity();
-            return _departmentRepository.Update(department);
+             _unitOfWork.DepartmentRepository.Update(department);
+            return _unitOfWork.SaveChanges();
+
         }
         // Delete Department
         public bool DeleteDepartment(int id)
         {
-            var dept = _departmentRepository.GetById(id);
+            var dept = _unitOfWork.DepartmentRepository.GetById(id);
             if (dept is null) return false;
             else
             {
-                int Result = _departmentRepository.Remove(dept);
-                return Result > 0;
+                dept.IsDeleted = true;
+                _unitOfWork.DepartmentRepository.Remove(dept);
+                return _unitOfWork.SaveChanges() > 0;
             }
         }
     }
