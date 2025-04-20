@@ -21,5 +21,6 @@ namespace BusinessLogic.DataTransfereObjects.EmployeeDtos
         public string Gender { get; set; } = string.Empty;
         [Display(Name = "Employee Type")]
         public string EmployeeType { get; set; } = string.Empty;
+        public string? Department { get; set; } = string.Empty;
     }
 }

@@ -22,12 +22,11 @@ namespace Presentation
             });
             //builder.Services.AddScoped<ApplicationDbContext>(); // Register to Services in DI Contianer
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
-            #region ConnectionStrings
-             //options.UseSqlServer(builder.Configuration["ConnectionStrings:DefaultConnection"])
-             //options.UseSqlServer(builder.Configuration.GetSection("ConnectionStrings")["DefaultConnection"])
-             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")) 
-            #endregion
-            );
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+                options.UseLazyLoadingProxies();
+             });
+            
             //builder.Services.AddScoped<DepartmentRepository>();
             builder.Services.AddScoped<IDepartmentRepository,DepartmentRepository>();
             builder.Services.AddScoped<IDepartmentServices,DepartmentServices>();
