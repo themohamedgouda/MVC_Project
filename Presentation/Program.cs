@@ -25,7 +25,7 @@ namespace Presentation
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
                 options.UseLazyLoadingProxies();
-             },ServiceLifetime.Scoped);
+             },ServiceLifetime.Scoped); 
             
             //builder.Services.AddScoped<DepartmentRepository>();
             //builder.Services.AddScoped<IDepartmentRepository,DepartmentRepository>();
