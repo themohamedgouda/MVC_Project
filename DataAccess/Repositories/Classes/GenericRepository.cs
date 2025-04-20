@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -56,6 +57,11 @@ namespace DataAccess.Repositories.Classes
             var Result = _dbContext.SaveChanges();
             return Result;
 
+        }
+
+        public IEnumerable<TEntity> GetAll(Expression<Func<TEntity, bool>> Predicate)
+        {
+            return _dbContext.Set<TEntity>().Where(Predicate).ToList();
         }
     }
 }
