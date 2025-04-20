@@ -32,6 +32,7 @@ namespace Presentation
             builder.Services.AddScoped<IDepartmentServices,DepartmentServices>();
             builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             builder.Services.AddScoped<IEmployeeServices, EmployeeServices>();
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             //builder.Services.AddAutoMapper(typeof(MappingProfiles));        
             //builder.Services.AddAutoMapper(typeof(ProjectReference).Assembly);        
             builder.Services.AddAutoMapper(M=>M.AddProfile(new MappingProfiles()));
