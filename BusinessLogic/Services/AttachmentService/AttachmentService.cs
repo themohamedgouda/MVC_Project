@@ -31,7 +31,7 @@ namespace BusinessLogic.Services.AttachmentService
             if (File.Length == 0 || File.Length > MaxSize) return null;
             //3- Checked Located Folder Path
             // var FolderPath = $"{Directory.GetCurrentDirectory()}\\wwwroot\\Files\\{FolderName}";
-            var FolderPath = Path.Combine(Directory.GetCurrentDirectory(),"wwwroot\\Files",File.FileName);
+            var FolderPath = Path.Combine(Directory.GetCurrentDirectory(),"wwwroot\\Files", FolderName);
             //4- Make Name UNIQUE
             var FileName = $"{Guid.NewGuid()}_{File.FileName}";
             //5- Get File Path

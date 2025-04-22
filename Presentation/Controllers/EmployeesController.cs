@@ -43,6 +43,7 @@ namespace Presentation.Controllers
                         Name = EmployeeViewModel.Name,
                         PhoneNumber = EmployeeViewModel.PhoneNumber,
                         Salary = EmployeeViewModel.Salary, 
+                        Image = EmployeeViewModel.Image
                     };
                     int Result = _employeeServices.CreateEmployee(employeeDto);
                     if (Result > 0)

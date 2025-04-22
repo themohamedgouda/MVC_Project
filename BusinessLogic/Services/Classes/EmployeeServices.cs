@@ -39,7 +39,15 @@ namespace BusinessLogic.Services.Classes
         public int CreateEmployee(CreatedEmployeeDTO createdEmployeeDTO)
         {
             var newEmployee = _mapper.Map<CreatedEmployeeDTO,Employee>(createdEmployeeDTO);
-             _unitOfWork.EmployeeRepository.Add(newEmployee); // add Locally
+
+            if (createdEmployeeDTO.Image is not null)
+            {
+                newEmployee.ImageName =  attachmentService.Upload(createdEmployeeDTO.Image, "Images");
+
+            }
+
+
+            _unitOfWork.EmployeeRepository.Add(newEmployee); // add Locally
             return _unitOfWork.SaveChanges();
         }
         public int UpdateEmployee(UpdatedEmployeeDTO updatedEmployeeDTO)
