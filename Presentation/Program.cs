@@ -1,4 +1,5 @@
 using BusinessLogic.Profiles;
+using BusinessLogic.Services.AttachmentService;
 using BusinessLogic.Services.Classes;
 using BusinessLogic.Services.Interfaces;
 using DataAccess.Data.Contexts;
@@ -32,6 +33,7 @@ namespace Presentation
             builder.Services.AddScoped<IDepartmentServices,DepartmentServices>();
             //builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             builder.Services.AddScoped<IEmployeeServices, EmployeeServices>();
+            builder.Services.AddScoped<IAttachmentService, AttachmentService>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             //builder.Services.AddAutoMapper(typeof(MappingProfiles));        
             //builder.Services.AddAutoMapper(typeof(ProjectReference).Assembly);        

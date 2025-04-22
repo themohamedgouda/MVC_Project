@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BusinessLogic.DataTransfereObjects.DepartmentDtos;
 using BusinessLogic.DataTransfereObjects.EmployeeDtos;
+using BusinessLogic.Services.AttachmentService;
 using BusinessLogic.Services.Interfaces;
 using DataAccess.Models.EmployeeModel;
 using DataAccess.Models.Shared.Enums;
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace BusinessLogic.Services.Classes
 {
-    public class EmployeeServices(IUnitOfWork _unitOfWork, IMapper _mapper) : IEmployeeServices
+    public class EmployeeServices(IUnitOfWork _unitOfWork, IMapper _mapper , IAttachmentService attachmentService) : IEmployeeServices
     {
         public IEnumerable<EmployeeDTO> GetAllEmployees(string? EmployeeSearchName, bool WithTracking = false)
         {
