@@ -1,4 +1,7 @@
 ﻿using DataAccess.Models.DepartmentModel;
+using DataAccess.Models.IdentityModel;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Data.Contexts
 {
-    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
+    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<ApplicationUser>(options)
     {
         #region Use Primay CTOR instead
         //public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
@@ -24,9 +27,11 @@ namespace DataAccess.Data.Contexts
         {
           // modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            base.OnModelCreating(modelBuilder);
         }
         public DbSet<Department> Departments { get; set; }
         public DbSet<Employee> Employees { get; set; }
+
 
     }
 }
