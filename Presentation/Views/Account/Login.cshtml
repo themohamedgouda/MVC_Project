@@ -1,4 +1,5 @@
-﻿@model LoginViewModel
+﻿@using Presentation.ViewModels.AuthViewModel
+@model LoginViewModel
 @{
     ViewData["Title"] = "Login";
     Layout = "~/Views/Shared/_AuthLayout.cshtml";
@@ -28,7 +29,3 @@
     </div>
 </div>
 
-@section Validation {
-    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-}
