@@ -1,10 +1,14 @@
 using BusinessLogic.Profiles;
+using BusinessLogic.Services.AttachmentService;
 using BusinessLogic.Services.Classes;
 using BusinessLogic.Services.Interfaces;
 using DataAccess.Data.Contexts;
+using DataAccess.Models.IdentityModel;
 using DataAccess.Repositories.Classes;
 using DataAccess.Repositories.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.Options;
 using Microsoft.EntityFrameworkCore;
 
 namespace Presentation
@@ -25,17 +29,19 @@ namespace Presentation
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
                 options.UseLazyLoadingProxies();
-             },ServiceLifetime.Scoped);
+             },ServiceLifetime.Scoped); 
             
             //builder.Services.AddScoped<DepartmentRepository>();
             //builder.Services.AddScoped<IDepartmentRepository,DepartmentRepository>();
             builder.Services.AddScoped<IDepartmentServices,DepartmentServices>();
             //builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             builder.Services.AddScoped<IEmployeeServices, EmployeeServices>();
+            builder.Services.AddScoped<IAttachmentService, AttachmentService>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddAutoMapper(M=>M.AddProfile(new MappingProfiles()));
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
             //builder.Services.AddAutoMapper(typeof(MappingProfiles));        
             //builder.Services.AddAutoMapper(typeof(ProjectReference).Assembly);        
-            builder.Services.AddAutoMapper(M=>M.AddProfile(new MappingProfiles()));
             #endregion
             // Add middleware to the container.
             #region MiddleWare
@@ -54,11 +60,12 @@ namespace Presentation
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Account}/{action=Login}/{id?}");
             #endregion
             app.Run();
         }

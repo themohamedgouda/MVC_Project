@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BusinessLogic.DataTransfereObjects.DepartmentDtos;
 using BusinessLogic.DataTransfereObjects.EmployeeDtos;
+using BusinessLogic.Services.AttachmentService;
 using BusinessLogic.Services.Interfaces;
 using DataAccess.Models.EmployeeModel;
 using DataAccess.Models.Shared.Enums;
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace BusinessLogic.Services.Classes
 {
-    public class EmployeeServices(IUnitOfWork _unitOfWork, IMapper _mapper) : IEmployeeServices
+    public class EmployeeServices(IUnitOfWork _unitOfWork, IMapper _mapper , IAttachmentService attachmentService) : IEmployeeServices
     {
         public IEnumerable<EmployeeDTO> GetAllEmployees(string? EmployeeSearchName, bool WithTracking = false)
         {
@@ -38,7 +39,15 @@ namespace BusinessLogic.Services.Classes
         public int CreateEmployee(CreatedEmployeeDTO createdEmployeeDTO)
         {
             var newEmployee = _mapper.Map<CreatedEmployeeDTO,Employee>(createdEmployeeDTO);
-             _unitOfWork.EmployeeRepository.Add(newEmployee); // add Locally
+
+            if (createdEmployeeDTO.Image is not null)
+            {
+                newEmployee.ImageName =  attachmentService.Upload(createdEmployeeDTO.Image, "Images");
+
+            }
+
+
+            _unitOfWork.EmployeeRepository.Add(newEmployee); // add Locally
             return _unitOfWork.SaveChanges();
         }
         public int UpdateEmployee(UpdatedEmployeeDTO updatedEmployeeDTO)

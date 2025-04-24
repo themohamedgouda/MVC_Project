@@ -4,12 +4,14 @@ using BusinessLogic.Services.Classes;
 using BusinessLogic.Services.Interfaces;
 using DataAccess.Models.EmployeeModel;
 using DataAccess.Models.Shared.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.ViewModels.DepartmentViwModel;
 using Presentation.ViewModels.EmployeeViwModel;
 
 namespace Presentation.Controllers
 {
+    [Authorize]
     public class EmployeesController(IEmployeeServices _employeeServices,IWebHostEnvironment _environment , ILogger<EmployeesController> _logger ) : Controller
     {
         public IActionResult Index(string? EmployeeSearchName)
@@ -43,6 +45,7 @@ namespace Presentation.Controllers
                         Name = EmployeeViewModel.Name,
                         PhoneNumber = EmployeeViewModel.PhoneNumber,
                         Salary = EmployeeViewModel.Salary, 
+                        Image = EmployeeViewModel.Image
                     };
                     int Result = _employeeServices.CreateEmployee(employeeDto);
                     if (Result > 0)

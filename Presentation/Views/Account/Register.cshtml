@@ -1,0 +1,63 @@
+﻿@using Presentation.ViewModels.AuthViewModel
+@model RegisterViewModel
+@{
+    ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/_AuthLayout.cshtml";
+}
+<!-- main -->
+<div class="main-w3layouts wrapper">
+	<div class="main-agileinfo">
+		<div class="agileits-top">
+			<form asp-controller="Account" asp-action="Register" method="post">
+
+				<div asp-validation-summary="ModelOnly"></div>
+				<input asp-for="UserName" placeholder="UserName">
+				<span asp-validation-for="UserName" class="text-danger"></span>
+				<br />
+				<input asp-for="FirstName" placeholder="FirstName" >
+				<span asp-validation-for="FirstName" class="text-danger"></span>
+				<br />
+				<input asp-for="LastName" placeholder="LastName">
+				<span asp-validation-for="LastName" class="text-danger"></span>
+				<br />
+				<input asp-for="Email" placeholder="Email" >
+				<span asp-validation-for="Email" class="text-danger"></span>
+				<br />
+				<input  asp-for="Password" placeholder="Password" >
+				<span asp-validation-for="Password" class="text-danger"></span>
+				<br />
+				<br />
+				<input  asp-for="ConfirmPassword" placeholder="ConfirmPassword" >
+				<span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+				<br />
+				<div class="wthree-text">
+					<label class="anim">
+						<input asp-for="IsAgree" class="checkbox">
+						<span>I Agree To The Terms & Conditions</span>
+					</label>
+					<div class="clear"> </div>
+				</div>
+				<input type="submit" value="SIGNUP">
+			</form>
+			<p>Do You have an Account? <a asp-action="Login" asp-controller="Account">  Login Now!</a></p>
+		</div>
+	</div>
+	<!-- copyright -->
+	<div class="colorlibcopy-agile">
+		<p>© 2018 Colorlib Signup Form. All rights reserved | Design by <a href="https://colorlib.com/" target="_blank">Colorlib</a></p>
+	</div>
+	<!-- //copyright -->
+	<ul class="colorlib-bubbles">
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+	</ul>
+</div>
+<!-- //main -->
