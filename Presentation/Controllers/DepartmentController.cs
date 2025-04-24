@@ -2,6 +2,7 @@
 using BusinessLogic.DataTransfereObjects.DepartmentDtos;
 using BusinessLogic.Services.Interfaces;
 using DataAccess.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.ViewModels;
 using Presentation.ViewModels.DepartmentViwModel;
@@ -9,6 +10,7 @@ using System.Linq.Expressions;
 
 namespace Presentation.Controllers
 {
+    [Authorize]
     public class DepartmentController(IDepartmentServices _departmentservices , 
         ILogger<DepartmentController> _logger , IWebHostEnvironment _environment) : Controller
     {

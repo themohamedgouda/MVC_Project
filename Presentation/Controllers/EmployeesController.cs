@@ -4,12 +4,14 @@ using BusinessLogic.Services.Classes;
 using BusinessLogic.Services.Interfaces;
 using DataAccess.Models.EmployeeModel;
 using DataAccess.Models.Shared.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.ViewModels.DepartmentViwModel;
 using Presentation.ViewModels.EmployeeViwModel;
 
 namespace Presentation.Controllers
 {
+    [Authorize]
     public class EmployeesController(IEmployeeServices _employeeServices,IWebHostEnvironment _environment , ILogger<EmployeesController> _logger ) : Controller
     {
         public IActionResult Index(string? EmployeeSearchName)
