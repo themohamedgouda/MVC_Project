@@ -39,7 +39,7 @@ namespace Presentation
             builder.Services.AddScoped<IAttachmentService, AttachmentService>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddAutoMapper(M=>M.AddProfile(new MappingProfiles()));
-            builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
             //builder.Services.AddAutoMapper(typeof(MappingProfiles));        
             //builder.Services.AddAutoMapper(typeof(ProjectReference).Assembly);        
             #endregion
