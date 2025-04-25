@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Presentation.Utilities;
 using Presentation.ViewModels.AuthViewModel;
+using Presentation.ViewModels.ForgetPasswordViewModel;
 
 namespace Presentation.Controllers
 {
@@ -74,6 +76,31 @@ namespace Presentation.Controllers
                 ModelState.AddModelError(string.Empty, "InvalidLogin");
             }
                 return View(viewModel);
+        }
+        [HttpGet]
+        public IActionResult ForgetPassword()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult SendResetPasswordLink(ForgetPasswordViewModel viewModel)
+        {
+            if (!ModelState.IsValid) return View(nameof(ForgetPassword),viewModel);
+            var User = _userManager.FindByEmailAsync(viewModel.Email).Result;
+            if (User != null)
+            {
+                var Email = new Email()
+                {
+                    To = viewModel.Email,
+                    Subject = "Reset Password",
+                    Body = "Reset Password To Do" // TODO
+                    
+                };
+
+
+            }
+            ModelState.AddModelError(string.Empty, "Invalid Operation");
+            return View(nameof(ForgetPassword), viewModel);
         }
     }
 }
