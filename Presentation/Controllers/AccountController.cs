@@ -94,13 +94,18 @@ namespace Presentation.Controllers
                     To = viewModel.Email,
                     Subject = "Reset Password",
                     Body = "Reset Password To Do" // TODO
-                    
                 };
 
-
+                EmailSettings.SendEmail(Email);
+                return RedirectToAction("CheckYouInboxAction");
             }
             ModelState.AddModelError(string.Empty, "Invalid Operation");
             return View(nameof(ForgetPassword), viewModel);
+        }
+        [HttpGet]
+        public IActionResult CheckYouInboxAction()
+        {
+            return View();
         }
     }
 }
