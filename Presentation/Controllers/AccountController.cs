@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using NuGet.Common;
 using Presentation.Utilities;
 using Presentation.ViewModels.AuthViewModel;
 using Presentation.ViewModels.ForgetPasswordViewModel;
+using Presentation.ViewModels.ResetPasswordViewModel;
 
 namespace Presentation.Controllers
 {
@@ -89,11 +91,13 @@ namespace Presentation.Controllers
             var User = _userManager.FindByEmailAsync(viewModel.Email).Result;
             if (User != null)
             {
+                var _Token = _userManager.GeneratePasswordResetTokenAsync(User).Result;
+                var ResetPasswordLink = Url.Action("ResetPassword", "Account", new { email = viewModel.Email , Token = _Token },Request.Scheme);
                 var Email = new Email()
                 {
                     To = viewModel.Email,
                     Subject = "Reset Password",
-                    Body = "Reset Password To Do" // TODO
+                    Body = ResetPasswordLink // TODO
                 };
 
                 EmailSettings.SendEmail(Email);
@@ -106,6 +110,35 @@ namespace Presentation.Controllers
         public IActionResult CheckYouInboxAction()
         {
             return View();
+        }
+        [HttpGet]
+        public IActionResult ResetPassword(string email , string token)
+        {
+            TempData["email"] = email;
+            TempData["token"] = token;
+            return View();
+        }
+        [HttpPost]
+        public IActionResult ResetPassword(ResetPasswordViewModel viewModel)
+        {
+            if (!ModelState.IsValid) return View(viewModel);
+            var Email = TempData["email"] as string ?? "";
+            var Token = TempData["token"] as string ?? "";
+            var User = _userManager.FindByEmailAsync(Email).Result;
+            if (User != null) 
+            {
+                var Result = _userManager.ResetPasswordAsync(user: User, Token, viewModel.Password).Result;
+                if (Result.Succeeded)
+                {
+                    return RedirectToAction(nameof(Login));
+                }
+                else
+                {
+                    foreach (var error in Result.Errors)
+                         ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+            return View(nameof(ResetPassword),viewModel);
         }
     }
 }
