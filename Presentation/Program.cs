@@ -1,3 +1,17 @@
+using BusinessLogic.Profiles;
+using BusinessLogic.Services.AttachmentService;
+using BusinessLogic.Services.Classes;
+using BusinessLogic.Services.Interfaces;
+using DataAccess.Data.Contexts;
+using DataAccess.Models.IdentityModel;
+using DataAccess.Repositories.Classes;
+using DataAccess.Repositories.Interfaces;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.Options;
+using Microsoft.EntityFrameworkCore;
+
 namespace Presentation
 {
     public class Program
@@ -7,10 +21,39 @@ namespace Presentation
             var builder = WebApplication.CreateBuilder(args);
             // Add services to the container.
             #region Services
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews(options=>
+            {
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            });
+            //builder.Services.AddScoped<ApplicationDbContext>(); // Register to Services in DI Contianer
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+                options.UseLazyLoadingProxies();
+             },ServiceLifetime.Scoped); 
+            
+            //builder.Services.AddScoped<DepartmentRepository>();
+            //builder.Services.AddScoped<IDepartmentRepository,DepartmentRepository>();
+            builder.Services.AddScoped<IDepartmentServices,DepartmentServices>();
+            //builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            builder.Services.AddScoped<IEmployeeServices, EmployeeServices>();
+            builder.Services.AddScoped<IAttachmentService, AttachmentService>();
+           
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddAutoMapper(M=>M.AddProfile(new MappingProfiles()));
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+            //builder.Services.AddAutoMapper(typeof(MappingProfiles));        
+            //builder.Services.AddAutoMapper(typeof(ProjectReference).Assembly);        
             #endregion
             // Add middleware to the container.
             #region MiddleWare
+            builder.Services.ConfigureApplicationCookie(config =>
+            {
+                config.ExpireTimeSpan = TimeSpan.FromDays(2);
+                config.LoginPath = "/Account/Login";
+                config.LogoutPath = "/Account/SignOut";
+                config.AccessDeniedPath ="/Home/Error";
+             });
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -26,11 +69,12 @@ namespace Presentation
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Account}/{action=Login}/{id?}");
             #endregion
             app.Run();
         }
