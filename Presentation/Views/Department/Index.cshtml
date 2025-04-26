@@ -58,7 +58,7 @@
                     <td>@Html.DisplayFor(d => department.Description)</td>
                     <td>@Html.DisplayFor(d => department.DateOfCreation)</td>
                     @* @Html.PartialAsync("_BtnPartialView" , employee.Id); *@
-                    <partial name="_BtnPartialView" model="department.DeptId"></partial>
+                    <partial name="_BtnPartialView" model="department.DeptId.ToString()"></partial>
          
                     <td>
                         <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#DeleteModal-@department.DeptId">
