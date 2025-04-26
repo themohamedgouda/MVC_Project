@@ -47,6 +47,13 @@ namespace Presentation
             #endregion
             // Add middleware to the container.
             #region MiddleWare
+            builder.Services.ConfigureApplicationCookie(config =>
+            {
+                config.ExpireTimeSpan = TimeSpan.FromDays(2);
+                config.LoginPath = "/Account/Login";
+                config.LogoutPath = "/Account/SignOut";
+                config.AccessDeniedPath ="/Home/Error";
+             });
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

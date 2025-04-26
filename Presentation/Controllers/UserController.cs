@@ -2,6 +2,7 @@
 using DataAccess.Models.EmployeeModel;
 using DataAccess.Models.IdentityModel;
 using DataAccess.Models.Shared.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ using Presentation.ViewModels.UsersViewModel;
 
 namespace Presentation.Controllers
 {
+    [Authorize]
     public class UserController(UserManager<ApplicationUser> userManager , IWebHostEnvironment environment) : Controller
     {
         #region Index
