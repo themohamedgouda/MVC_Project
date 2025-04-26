@@ -140,5 +140,10 @@ namespace Presentation.Controllers
             }
             return View(nameof(ResetPassword),viewModel);
         }
+        public new async Task<IActionResult> SignOut()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction(nameof(Login));
+        }
     }
 }

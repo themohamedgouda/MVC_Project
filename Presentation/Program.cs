@@ -6,6 +6,7 @@ using DataAccess.Data.Contexts;
 using DataAccess.Models.IdentityModel;
 using DataAccess.Repositories.Classes;
 using DataAccess.Repositories.Interfaces;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Options;
@@ -37,6 +38,7 @@ namespace Presentation
             //builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             builder.Services.AddScoped<IEmployeeServices, EmployeeServices>();
             builder.Services.AddScoped<IAttachmentService, AttachmentService>();
+           
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddAutoMapper(M=>M.AddProfile(new MappingProfiles()));
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
