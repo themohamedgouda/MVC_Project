@@ -1,4 +1,4 @@
-using BusinessLogic.Profiles;
+﻿using BusinessLogic.Profiles;
 using BusinessLogic.Services.AttachmentService;
 using BusinessLogic.Services.Classes;
 using BusinessLogic.Services.Interfaces;
@@ -12,9 +12,12 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Options;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Presentation.Helper;
 using Presentation.Settings;
 using Presentation.Utilities;
+using Vonage;
+using Vonage.Request;
 
 namespace Presentation
 {
@@ -43,7 +46,9 @@ namespace Presentation
             builder.Services.AddScoped<IEmployeeServices, EmployeeServices>();
             builder.Services.AddScoped<IAttachmentService, AttachmentService>();
             builder.Services.AddTransient<IMailServices, MailServices>();
-           
+            builder.Services.AddScoped<IVonageSmsService, VonageSmsService>();
+
+
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddAutoMapper(M=>M.AddProfile(new MappingProfiles()));
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
@@ -60,6 +65,20 @@ namespace Presentation
                 config.AccessDeniedPath ="/Home/Error";
              });
             builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
+            builder.Services.Configure<VonageSettings>(builder.Configuration.GetSection("VonageSettings"));
+
+            // تسجيل VonageClient في DI Container
+            builder.Services.AddSingleton<VonageClient>(provider =>
+            {
+                var settings = provider.GetRequiredService<IOptions<VonageSettings>>().Value;
+
+                var credentials = Credentials.FromApiKeyAndSecret(
+                    settings.ApiKey,
+                    settings.ApiSecret
+                );
+
+                return new VonageClient(credentials);
+            });
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

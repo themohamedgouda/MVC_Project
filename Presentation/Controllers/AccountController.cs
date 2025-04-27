@@ -12,7 +12,7 @@ using Presentation.ViewModels.ResetPasswordViewModel;
 
 namespace Presentation.Controllers
 {
-    public class AccountController(UserManager<ApplicationUser> _userManager , SignInManager<ApplicationUser> _signInManager , IMailServices mailService) : Controller
+    public class AccountController(UserManager<ApplicationUser> _userManager , SignInManager<ApplicationUser> _signInManager , IMailServices mailService , IVonageSmsService _vonageSmsService) : Controller
     {
         [HttpGet]
         public IActionResult Register()
@@ -105,6 +105,34 @@ namespace Presentation.Controllers
                // EmailSettings.SendEmail(Email);
                 mailService.Send(Email);    
                 return RedirectToAction("CheckYouInboxAction");
+            }
+            ModelState.AddModelError(string.Empty, "Invalid Operation");
+            return View(nameof(ForgetPassword), viewModel);
+        }
+        [HttpPost]
+        public  IActionResult SendResetPasswordSMS(ForgetPasswordViewModel viewModel)
+        {
+            if (!ModelState.IsValid) return View(nameof(ForgetPassword), viewModel);
+            var User = _userManager.FindByEmailAsync(viewModel.Email).Result;
+            if (User != null)
+            {
+                var _Token = _userManager.GeneratePasswordResetTokenAsync(User).Result;
+                var ResetPasswordLink = Url.Action("ResetPassword", "Account", new { email = viewModel.Email, Token = _Token }, Request.Scheme);
+                //var Email = new Email()
+                //{
+                //    To = viewModel.Email,
+                //    Subject = "Reset Password",
+                //    Body = ResetPasswordLink // TODO
+                //};
+                // EmailSettings.SendEmail(Email);
+                //mailService.Send(Email);
+                var sms = new SmsMessage()
+                {
+                    Body = ResetPasswordLink,
+                    PhoneNumber = User.PhoneNumber
+                };
+               var Result = _vonageSmsService.SendSmsAsync(sms.PhoneNumber, sms.Body).Result;
+                return Ok("Check you sms");
             }
             ModelState.AddModelError(string.Empty, "Invalid Operation");
             return View(nameof(ForgetPassword), viewModel);
