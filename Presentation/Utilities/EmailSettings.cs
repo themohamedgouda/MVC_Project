@@ -9,11 +9,11 @@ namespace Presentation.Utilities
     {
         public static void SendEmail(Email email)
         {
-            var Client = new SmtpClient(" smtp.gmail.com",587);
+            var Client = new SmtpClient(" smtp.gmail.com", 587);
             Client.EnableSsl = true;
             Client.Credentials = new NetworkCredential("themohamedgouda@gmail.com", "wdifosagygtwcxdg\r\n");
             Client.Send("themohamedgouda@gmail.com", email.To, email.Subject, email.Body);
-            
         }
+        
     }
 }

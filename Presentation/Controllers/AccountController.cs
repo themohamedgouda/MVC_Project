@@ -1,8 +1,10 @@
 ﻿using DataAccess.Models.IdentityModel;
+using MailKit;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using NuGet.Common;
+using Presentation.Helper;
 using Presentation.Utilities;
 using Presentation.ViewModels.AuthViewModel;
 using Presentation.ViewModels.ForgetPasswordViewModel;
@@ -10,7 +12,7 @@ using Presentation.ViewModels.ResetPasswordViewModel;
 
 namespace Presentation.Controllers
 {
-    public class AccountController(UserManager<ApplicationUser> _userManager , SignInManager<ApplicationUser> _signInManager) : Controller
+    public class AccountController(UserManager<ApplicationUser> _userManager , SignInManager<ApplicationUser> _signInManager , IMailServices mailService) : Controller
     {
         [HttpGet]
         public IActionResult Register()
@@ -100,7 +102,8 @@ namespace Presentation.Controllers
                     Body = ResetPasswordLink // TODO
                 };
 
-                EmailSettings.SendEmail(Email);
+               // EmailSettings.SendEmail(Email);
+                mailService.Send(Email);    
                 return RedirectToAction("CheckYouInboxAction");
             }
             ModelState.AddModelError(string.Empty, "Invalid Operation");

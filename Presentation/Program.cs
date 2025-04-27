@@ -6,11 +6,15 @@ using DataAccess.Data.Contexts;
 using DataAccess.Models.IdentityModel;
 using DataAccess.Repositories.Classes;
 using DataAccess.Repositories.Interfaces;
+using MailKit;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Options;
 using Microsoft.EntityFrameworkCore;
+using Presentation.Helper;
+using Presentation.Settings;
+using Presentation.Utilities;
 
 namespace Presentation
 {
@@ -38,6 +42,7 @@ namespace Presentation
             //builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             builder.Services.AddScoped<IEmployeeServices, EmployeeServices>();
             builder.Services.AddScoped<IAttachmentService, AttachmentService>();
+            builder.Services.AddTransient<IMailServices, MailServices>();
            
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddAutoMapper(M=>M.AddProfile(new MappingProfiles()));
@@ -54,6 +59,7 @@ namespace Presentation
                 config.LogoutPath = "/Account/SignOut";
                 config.AccessDeniedPath ="/Home/Error";
              });
+            builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -80,3 +86,9 @@ namespace Presentation
         }
     }
 }
+// Steps To integrate with any External Services
+/*
+    1- App Settings handling
+    2- Install package
+    3- Account Controller
+ */
